@@ -1,0 +1,21 @@
+{
+  "name": "numbers-to-words-romanian",
+  "version": "1.0.0",
+  "description": "Converts Numbers from digits to romanian words",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virgil-av/numbers-to-words-romanian.git"
+  },
+  "keywords": [
+    "words",
+    "digits",
+    "romanian"
+  ],
+  "author": "Avram Virgil",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/virgil-av/numbers-to-words-romanian/issues"
+  },
+  "homepage": "https://github.com/virgil-av/numbers-to-words-romanian#readme"
+}
