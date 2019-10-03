@@ -15,9 +15,14 @@ const TENTHS_LESS_THAN_HUNDRED = [
     'zero', 'zece', 'douăzeci', 'treizeci', 'patruzeci', 'cincizeci', 'șaizeci', 'șaptezeci', 'optzeci', 'nouăzeci'
 ];
 
-function generateWords(nr, words) {
+export function generateWords(nr, words) {
     let remainder;
     let word;
+
+    // If NaN just stop and return
+    if(isNaN(nr)){
+        return 'NaN'
+    }
 
     // We’re done
     if (nr === 0) {
