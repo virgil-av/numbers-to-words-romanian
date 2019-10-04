@@ -1,5 +1,8 @@
 language: nodejs
 
+node_js:
+  - "11.14"
+
 before_script:
   - npm run setup
   - npm run build
