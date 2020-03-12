@@ -41,7 +41,7 @@ const TENTHS_LESS_THAN_HUNDRED = [
   'nouăzeci',
 ];
 
-function generateWords(nr: number, words?: string[]): string {
+export function generateWords(nr: number, words?: string[]): string {
   let remainder: number = 0;
   let word: string = '';
 
