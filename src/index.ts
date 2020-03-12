@@ -42,15 +42,20 @@ const TENTHS_LESS_THAN_HUNDRED = [
 ];
 
 export function generateWords(nr: number, words?: string[]): string {
-  let remainder: number = 0;
-  let word: string = '';
+  let remainder = 0;
+  let word = '';
 
-  // If NaN just stop and return 'NaN'
+  // If NaN stop and return 'NaN'
   if (isNaN(nr)) {
     return 'NaN';
   }
 
-  // We’re done
+  // if user go past trillion just return a warning message
+  if (nr > ONE_TRILLION - 1) {
+    return 'over library limit';
+  }
+
+  // We are done, if words[] is empty than we have zero else join words
   if (nr === 0) {
     return !words ? 'zero' : words.join(' ').replace(/,$/, '');
   }
@@ -64,69 +69,91 @@ export function generateWords(nr: number, words?: string[]): string {
     nr = Math.abs(nr);
   }
 
-  if (nr < 20) {
-    remainder = 0;
-    word = LESS_THAN_TWENTY[nr];
-  } else if (nr < ONE_HUNDRED) {
-    remainder = nr % TEN;
-    word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
-    // In case of remainder, we need to handle it here to be able to add the “ si ”
-    if (remainder) {
-      word += ' și ' + LESS_THAN_TWENTY[remainder];
+  switch (true) {
+    case (nr < 20):
       remainder = 0;
-    }
-  } else if (nr < ONE_THOUSAND) {
-    remainder = nr % ONE_HUNDRED;
-    const hundreds = Math.floor(nr / ONE_HUNDRED);
-    if (hundreds === 1) {
-      word = 'o sută';
-    } else if (hundreds === 2) {
-      word = 'două sute';
-    } else {
-      word = generateWords(hundreds) + ' sute';
-    }
-  } else if (nr < ONE_MILLION) {
-    remainder = nr % ONE_THOUSAND;
-    const thousands = Math.floor(nr / ONE_THOUSAND);
-    if (thousands === 1) {
-      word = 'o mie';
-    } else if (thousands === 2) {
-      word = 'două mii';
-    }else if (thousands < 20) {
-      word = generateWords(thousands) + ' mii';
-    }else if (thousands > 100 && thousands % 100 < 20) {
-      word = generateWords(thousands) + ' mii';
-    } else {
-      word = generateWords(thousands) + ' de mii';
-    }
-  } else if (nr < ONE_BILLION) {
-    remainder = nr % ONE_MILLION;
-    const millions = Math.floor(nr / ONE_MILLION);
-    if (millions === 1) {
-      word = 'un milion';
-    } else if (millions === 2) {
-      word = 'două milioane';
-    } else if (millions < 20) {
-      word = generateWords(millions) + ' milioane';
-    } else if (millions > 100 && millions % 100 < 20) {
-      word = generateWords(millions) + ' milioane';
-    } else {
-      word = generateWords(millions) + ' de milioane';
-    }
-  } else if (nr < ONE_TRILLION) {
-    remainder = nr % ONE_BILLION;
-    const billions = Math.floor(nr / ONE_BILLION);
-    if (billions === 1) {
-      word = 'un miliard';
-    } else if (billions === 2) {
-      word = 'două miliarde';
-    } else if (billions < 20) {
-      word = generateWords(billions) + ' miliarde';
-    }else if (billions > 100 && billions % 100 < 20) {
-      word = generateWords(billions) + ' miliarde';
-    } else {
-      word = generateWords(billions) + ' de miliarde';
-    }
+      word = LESS_THAN_TWENTY[nr];
+      break;
+    case (nr < ONE_HUNDRED):
+      remainder = nr % TEN;
+      word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
+      // In case of remainder, we need to handle it here to be able to add the “ și ”
+      if (remainder) {
+        word += ' și ' + LESS_THAN_TWENTY[remainder];
+        remainder = 0;
+      }
+      break;
+    case (nr < ONE_THOUSAND):
+      remainder = nr % ONE_HUNDRED;
+      const hundreds = Math.floor(nr / ONE_HUNDRED);
+
+      switch (hundreds) {
+        case 1:
+          word = 'o sută';
+          break;
+        case 2:
+          word = 'două sute';
+          break;
+        default:
+          word = generateWords(hundreds) + ' sute';
+      }
+      break;
+    case (nr < ONE_MILLION):
+      remainder = nr % ONE_THOUSAND;
+      const thousands = Math.floor(nr / ONE_THOUSAND);
+
+      switch (true) {
+        case (thousands === 1):
+          word = 'o mie';
+          break;
+        case (thousands === 2):
+          word = 'două mii';
+          break;
+        case (thousands < 20 || (thousands > 100 && thousands % 100 < 20)):
+          word = generateWords(thousands) + ' mii';
+          break;
+        default:
+          word = generateWords(thousands) + ' de mii';
+      }
+      break;
+    case (nr < ONE_BILLION):
+      remainder = nr % ONE_MILLION;
+      const millions = Math.floor(nr / ONE_MILLION);
+
+      switch (true) {
+        case (millions === 1):
+          word = 'un milion';
+          break;
+        case (millions === 2):
+          word = 'două milioane';
+          break;
+        case (millions < 20 || (millions > 100 && millions % 100 < 20)):
+          word = generateWords(millions) + ' milioane';
+          break;
+        default:
+          word = generateWords(millions) + ' de milioane';
+      }
+      break;
+    case (nr < ONE_TRILLION):
+      remainder = nr % ONE_BILLION;
+      const billions = Math.floor(nr / ONE_BILLION);
+
+      switch (true) {
+        case (billions === 1):
+          word = 'un miliard';
+          break;
+        case (billions === 2):
+          word = 'două miliarde';
+          break;
+        case (billions < 20 || (billions > 100 && billions % 100 < 20)):
+          word = generateWords(billions) + ' miliarde';
+          break;
+        default:
+          word = generateWords(billions) + ' de miliarde';
+      }
+      break;
+    default:
+      console.log('nothing');
   }
 
   words.push(word);
