@@ -1,6 +1,6 @@
 {
   "name": "numbers-to-words-romanian",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Converts Numbers from digits to romanian words",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

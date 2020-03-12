@@ -41,7 +41,7 @@ const TENTHS_LESS_THAN_HUNDRED = [
   'nouăzeci',
 ];
 
-export function generateWords(nr: number, words?: string[]): string {
+function generateWords(nr: number, words?: string[]): string {
   let remainder: number = 0;
   let word: string = '';
 
@@ -92,7 +92,9 @@ export function generateWords(nr: number, words?: string[]): string {
       word = 'o mie';
     } else if (thousands === 2) {
       word = 'două mii';
-    } else if (thousands < 20) {
+    }else if (thousands < 20) {
+      word = generateWords(thousands) + ' mii';
+    }else if (thousands > 100 && thousands % 100 < 20) {
       word = generateWords(thousands) + ' mii';
     } else {
       word = generateWords(thousands) + ' de mii';
@@ -106,6 +108,8 @@ export function generateWords(nr: number, words?: string[]): string {
       word = 'două milioane';
     } else if (millions < 20) {
       word = generateWords(millions) + ' milioane';
+    } else if (millions > 100 && millions % 100 < 20) {
+      word = generateWords(millions) + ' milioane';
     } else {
       word = generateWords(millions) + ' de milioane';
     }
@@ -117,6 +121,8 @@ export function generateWords(nr: number, words?: string[]): string {
     } else if (billions === 2) {
       word = 'două miliarde';
     } else if (billions < 20) {
+      word = generateWords(billions) + ' miliarde';
+    }else if (billions > 100 && billions % 100 < 20) {
       word = generateWords(billions) + ' miliarde';
     } else {
       word = generateWords(billions) + ' de miliarde';
