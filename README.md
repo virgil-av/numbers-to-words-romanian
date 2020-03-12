@@ -19,7 +19,7 @@ generateWords(100)
 // javascript
 const {generateWords} = require('numbers-to-words-romanian');
 
-generateWords(19)
+generateWords(125)
 // => o sută douăzeci și cinci
 
 generateWords(118931)
