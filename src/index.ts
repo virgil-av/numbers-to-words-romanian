@@ -112,21 +112,21 @@ export function generateWords(nr: number, words: string[] = []): string {
   return generateWords(remainder, words);
 }
 
-function match(nr: number, s: string, p: string): string {
+function match(nr: number, numberUnitsSingular: string, numberUnitsPlural: string): string {
   let str = '';
 
   switch (true) {
     case (nr === 1):
-      str = s;
+      str = numberUnitsSingular;
       break;
     case (nr === 2):
-      str = 'două ' + p;
+      str = 'două ' + numberUnitsPlural;
       break;
     case (nr < 20 || (nr > 100 && nr % 100 < 20)):
-      str = generateWords(nr) + ' ' + p;
+      str = generateWords(nr) + ' ' + numberUnitsPlural;
       break;
     default:
-      str = generateWords(nr) + ' de ' + p;
+      str = generateWords(nr) + ' de ' + numberUnitsPlural;
   }
 
   return str;
