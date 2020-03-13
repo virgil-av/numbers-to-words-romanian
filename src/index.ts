@@ -57,7 +57,7 @@ export function generateWords(nr: number, words: string[] = []): string {
 
   // We are done, if words[] is empty than we have zero else join words
   if (nr === 0) {
-    return !words.length ? 'zero' : words.join(' ').replace(/,$/, '');
+    return !words.length ? 'zero' : words.join(' ');
   }
 
   // If negative, prepend “minus”
