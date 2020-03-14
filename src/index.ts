@@ -57,7 +57,7 @@ export function generateWords(nr: number, words: string[] = []): string {
 
   // We are done, if words[] is empty than we have zero else join words,
   // replace() is used to prevent errors when user writes a number 100,000 instead of 100000
-  if (nr === 0) {
+  if (nr === 0 && nr % 1 === 0) {
     return !words.length ? 'zero' : words.join(' ').replace(/,$/, '');
   }
 
@@ -65,6 +65,15 @@ export function generateWords(nr: number, words: string[] = []): string {
   if (nr < 0) {
     words.push('minus');
     nr = Math.abs(nr);
+  }
+
+  // takes the decimals adds the necessary prepends
+  if (nr > 0 && nr < 1) {
+    words.push('virgulă');
+    nr = parseInt(nr.toFixed(2).split('.')[1], 10);
+    if (nr < 10) {
+      words.push('zero');
+    }
   }
 
   switch (true) {
