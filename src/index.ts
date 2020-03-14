@@ -79,10 +79,8 @@ function generateWords(nr: number, words: string[] = []): string {
       word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
       // In case of remainder, we need to handle it here to be able to add the “ și ”
       if (remainder) {
-        word += ' și ' + LESS_THAN_TWENTY[remainder];
-        remainder = 0;
+        word += ' și ';
       }
-      word += parseDecimals(nr);
       break;
     case (nr < ONE_THOUSAND):
       remainder = nr % ONE_HUNDRED;
