@@ -40,6 +40,7 @@ generateWords(999999999999)
 ```
 
 #### Changelog
+- v1.3.2 restored undocumented string replace() method that was scrapped during PR
 - v1.3.1 code cleanup, improved logic, added more tests
 - v1.3.0 improved logic by using switch case, added more test cases, updated readme, added warning message if user requests a number over max limit
 - v1.2.0 added new rule for thousands, millions and billions

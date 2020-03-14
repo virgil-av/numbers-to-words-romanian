@@ -55,9 +55,10 @@ export function generateWords(nr: number, words: string[] = []): string {
     return 'over library limit';
   }
 
-  // We are done, if words[] is empty than we have zero else join words
+  // We are done, if words[] is empty than we have zero else join words,
+  // replace() is used to prevent errors when user writes a number 100,000 instead of 100000
   if (nr === 0) {
-    return !words.length ? 'zero' : words.join(' ');
+    return !words.length ? 'zero' : words.join(' ').replace(/,$/, '');
   }
 
   // If negative, prepend “minus”
