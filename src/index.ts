@@ -41,7 +41,7 @@ const TENTHS_LESS_THAN_HUNDRED = [
   'nouăzeci',
 ];
 
-function generateWords(nr: number, words: string[] = []): string {
+export function generateWords(nr: number, words: string[] = []): string {
   let remainder = 0;
   let word = '';
 
@@ -75,7 +75,6 @@ function generateWords(nr: number, words: string[] = []): string {
       break;
     case (nr < ONE_HUNDRED):
       remainder = Math.trunc(nr % TEN);
-      console.log(remainder);
       word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
       // In case of remainder, we need to handle it here to be able to add the “ și ”
       if (remainder) {
