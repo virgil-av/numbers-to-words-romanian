@@ -41,7 +41,7 @@ const TENTHS_LESS_THAN_HUNDRED = [
   'nouăzeci',
 ];
 
-export function generateWords(nr: number, words?: string[]): string {
+export function generateWords(nr: number, words: string[] = []): string {
   let remainder = 0;
   let word = '';
 
@@ -57,12 +57,9 @@ export function generateWords(nr: number, words?: string[]): string {
 
   // We are done, if words[] is empty than we have zero else join words
   if (nr === 0) {
-    return !words ? 'zero' : words.join(' ').replace(/,$/, '');
+    return !words.length ? 'zero' : words.join(' ');
   }
-  // First run
-  if (!words) {
-    words = [];
-  }
+
   // If negative, prepend “minus”
   if (nr < 0) {
     words.push('minus');
@@ -71,22 +68,19 @@ export function generateWords(nr: number, words?: string[]): string {
 
   switch (true) {
     case (nr < 20):
-      remainder = 0;
       word = LESS_THAN_TWENTY[nr];
       break;
     case (nr < ONE_HUNDRED):
-      remainder = nr % TEN;
+      const r = nr % TEN;
       word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
       // In case of remainder, we need to handle it here to be able to add the “ și ”
-      if (remainder) {
-        word += ' și ' + LESS_THAN_TWENTY[remainder];
-        remainder = 0;
+      if (r) {
+        word += ' și ' + LESS_THAN_TWENTY[r];
       }
       break;
     case (nr < ONE_THOUSAND):
       remainder = nr % ONE_HUNDRED;
       const hundreds = Math.floor(nr / ONE_HUNDRED);
-
       switch (hundreds) {
         case 1:
           word = 'o sută';
@@ -101,61 +95,39 @@ export function generateWords(nr: number, words?: string[]): string {
     case (nr < ONE_MILLION):
       remainder = nr % ONE_THOUSAND;
       const thousands = Math.floor(nr / ONE_THOUSAND);
-
-      switch (true) {
-        case (thousands === 1):
-          word = 'o mie';
-          break;
-        case (thousands === 2):
-          word = 'două mii';
-          break;
-        case (thousands < 20 || (thousands > 100 && thousands % 100 < 20)):
-          word = generateWords(thousands) + ' mii';
-          break;
-        default:
-          word = generateWords(thousands) + ' de mii';
-      }
+      word = match(thousands, 'o mie', 'mii');
       break;
     case (nr < ONE_BILLION):
       remainder = nr % ONE_MILLION;
       const millions = Math.floor(nr / ONE_MILLION);
-
-      switch (true) {
-        case (millions === 1):
-          word = 'un milion';
-          break;
-        case (millions === 2):
-          word = 'două milioane';
-          break;
-        case (millions < 20 || (millions > 100 && millions % 100 < 20)):
-          word = generateWords(millions) + ' milioane';
-          break;
-        default:
-          word = generateWords(millions) + ' de milioane';
-      }
+      word = match(millions, 'un milion', 'milioane');
       break;
     case (nr < ONE_TRILLION):
       remainder = nr % ONE_BILLION;
       const billions = Math.floor(nr / ONE_BILLION);
-
-      switch (true) {
-        case (billions === 1):
-          word = 'un miliard';
-          break;
-        case (billions === 2):
-          word = 'două miliarde';
-          break;
-        case (billions < 20 || (billions > 100 && billions % 100 < 20)):
-          word = generateWords(billions) + ' miliarde';
-          break;
-        default:
-          word = generateWords(billions) + ' de miliarde';
-      }
+      word = match(billions, 'un miliard', 'miliarde');
       break;
-    default:
-      console.log('nothing');
   }
-
   words.push(word);
   return generateWords(remainder, words);
+}
+
+function match(nr: number, numberUnitsSingular: string, numberUnitsPlural: string): string {
+  let str = '';
+
+  switch (true) {
+    case (nr === 1):
+      str = numberUnitsSingular;
+      break;
+    case (nr === 2):
+      str = 'două ' + numberUnitsPlural;
+      break;
+    case (nr < 20 || (nr > 100 && nr % 100 < 20)):
+      str = generateWords(nr) + ' ' + numberUnitsPlural;
+      break;
+    default:
+      str = generateWords(nr) + ' de ' + numberUnitsPlural;
+  }
+
+  return str;
 }
