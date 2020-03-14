@@ -41,7 +41,7 @@ const TENTHS_LESS_THAN_HUNDRED = [
   'nouăzeci',
 ];
 
-export function generateWords(nr: number, words: string[] = []): string {
+function generateWords(nr: number, words: string[] = []): string {
   let remainder = 0;
   let word = '';
 
@@ -57,7 +57,7 @@ export function generateWords(nr: number, words: string[] = []): string {
 
   // We are done, if words[] is empty than we have zero else join words,
   // replace() is used to prevent errors when user writes a number 100,000 instead of 100000
-  if (nr === 0 && nr % 1 === 0) {
+  if (nr === 0) {
     return !words.length ? 'zero' : words.join(' ').replace(/,$/, '');
   }
 
@@ -67,26 +67,22 @@ export function generateWords(nr: number, words: string[] = []): string {
     nr = Math.abs(nr);
   }
 
-  // takes the decimals adds the necessary prepends
-  if (nr > 0 && nr < 1) {
-    words.push('virgulă');
-    nr = parseInt(nr.toFixed(2).split('.')[1], 10);
-    if (nr < 10) {
-      words.push('zero');
-    }
-  }
-
   switch (true) {
     case (nr < 20):
-      word = LESS_THAN_TWENTY[nr];
+      remainder = 0;
+      word = LESS_THAN_TWENTY[Math.trunc(nr)];
+      word += parseDecimals(nr);
       break;
     case (nr < ONE_HUNDRED):
-      const r = nr % TEN;
+      remainder = Math.trunc(nr % TEN);
+      console.log(remainder);
       word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
       // In case of remainder, we need to handle it here to be able to add the “ și ”
-      if (r) {
-        word += ' și ' + LESS_THAN_TWENTY[r];
+      if (remainder) {
+        word += ' și ' + LESS_THAN_TWENTY[remainder];
+        remainder = 0;
       }
+      word += parseDecimals(nr);
       break;
     case (nr < ONE_THOUSAND):
       remainder = nr % ONE_HUNDRED;
@@ -120,6 +116,20 @@ export function generateWords(nr: number, words: string[] = []): string {
   }
   words.push(word);
   return generateWords(remainder, words);
+}
+
+function parseDecimals(nr: number): string {
+  const decimals = parseInt(nr.toFixed(2).split('.')[1], 10);
+  let word = '';
+  if (decimals > 0) {
+    word += ' virgulă ';
+
+    if (decimals < 10) {
+      word += 'zero ';
+    }
+    word += generateWords(decimals);
+  }
+  return word;
 }
 
 function match(nr: number, numberUnitsSingular: string, numberUnitsPlural: string): string {
