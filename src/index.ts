@@ -127,7 +127,7 @@ function parseHundreds(hundreds: number): string {
 }
 
 function extractDecimals(nr: number): number {
-  return +nr.toFixed(2) * 100 - Math.trunc(nr) * 100;
+  return Math.trunc(+nr.toFixed(2) * 100) - Math.trunc(Math.trunc(nr) * 100);
 }
 
 function parseDecimals(decimals: number): string {
