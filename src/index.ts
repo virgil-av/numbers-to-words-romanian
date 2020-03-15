@@ -42,6 +42,11 @@ const TENTHS_LESS_THAN_HUNDRED = [
 ];
 
 export function generateWords(nr: number, words: string[] = []): string {
+  let remainder = 0;
+  let quotient: number;
+  let integer: number;
+  let decimals: number;
+
   // If NaN stop and return 'NaN'
   if (isNaN(nr)) {
     return 'NaN';
@@ -62,11 +67,6 @@ export function generateWords(nr: number, words: string[] = []): string {
     words.push('minus');
     nr = Math.abs(nr);
   }
-
-  let remainder = 0;
-  let quotient: number;
-  let integer: number;
-  let decimals: number;
 
   switch (true) {
     case (nr < 20):
