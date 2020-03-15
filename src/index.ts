@@ -42,9 +42,6 @@ const TENTHS_LESS_THAN_HUNDRED = [
 ];
 
 export function generateWords(nr: number, words: string[] = []): string {
-  let remainder = 0;
-  let word = '';
-
   // If NaN stop and return 'NaN'
   if (isNaN(nr)) {
     return 'NaN';
@@ -55,10 +52,9 @@ export function generateWords(nr: number, words: string[] = []): string {
     return 'over library limit';
   }
 
-  // We are done, if words[] is empty than we have zero else join words,
-  // replace() is used to prevent errors when user writes a number 100,000 instead of 100000
+  // We are done, if words[] is empty than we have zero else join words
   if (nr === 0) {
-    return !words.length ? 'zero' : words.join(' ').replace(/,$/, '');
+    return !words.length ? 'zero' : words.join(' ');
   }
 
   // If negative, prepend “minus”
@@ -67,65 +63,84 @@ export function generateWords(nr: number, words: string[] = []): string {
     nr = Math.abs(nr);
   }
 
+  let remainder = 0;
+  let quotient: number;
+  let integer: number;
+  let decimals: number;
+
   switch (true) {
     case (nr < 20):
-      remainder = 0;
-      word = LESS_THAN_TWENTY[Math.trunc(nr)];
-      word += parseDecimals(nr);
+      [,, integer, decimals] = parseNumber(nr);
+      words.push(LESS_THAN_TWENTY[integer]);
+      if (decimals > 0) {
+        words.push(parseDecimals(decimals));
+      }
       break;
     case (nr < ONE_HUNDRED):
-      remainder = Math.trunc(nr % TEN);
-      word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
+      [quotient, remainder] = parseNumber(nr, TEN);
+      words.push(TENTHS_LESS_THAN_HUNDRED[quotient]);
       // In case of remainder, we need to handle it here to be able to add the “ și ”
       if (remainder) {
-        word += ' și ';
+        words.push('și');
       }
       break;
     case (nr < ONE_THOUSAND):
-      remainder = nr % ONE_HUNDRED;
-      const hundreds = Math.floor(nr / ONE_HUNDRED);
-      switch (hundreds) {
-        case 1:
-          word = 'o sută';
-          break;
-        case 2:
-          word = 'două sute';
-          break;
-        default:
-          word = generateWords(hundreds) + ' sute';
-      }
+      [quotient, remainder] = parseNumber(nr, ONE_HUNDRED);
+      words.push(parseHundreds(quotient));
       break;
     case (nr < ONE_MILLION):
-      remainder = nr % ONE_THOUSAND;
-      const thousands = Math.floor(nr / ONE_THOUSAND);
-      word = match(thousands, 'o mie', 'mii');
+      [quotient, remainder] = parseNumber(nr, ONE_THOUSAND);
+      words.push(match(quotient, 'o mie', 'mii'));
       break;
     case (nr < ONE_BILLION):
-      remainder = nr % ONE_MILLION;
-      const millions = Math.floor(nr / ONE_MILLION);
-      word = match(millions, 'un milion', 'milioane');
+      [quotient, remainder] = parseNumber(nr, ONE_MILLION);
+      words.push(match(quotient, 'un milion', 'milioane'));
       break;
     case (nr < ONE_TRILLION):
-      remainder = nr % ONE_BILLION;
-      const billions = Math.floor(nr / ONE_BILLION);
-      word = match(billions, 'un miliard', 'miliarde');
+      [quotient, remainder] = parseNumber(nr, ONE_BILLION);
+      words.push(match(quotient, 'un miliard', 'miliarde'));
       break;
   }
-  words.push(word);
+
   return generateWords(remainder, words);
 }
 
-function parseDecimals(nr: number): string {
-  const decimals = parseInt(nr.toFixed(2).split('.')[1], 10);
-  let word = '';
-  if (decimals > 0) {
-    word += ' virgulă ';
+function parseNumber(nr: number, divider = 1): number[] {
+  return [Math.trunc(nr / divider), nr % divider, Math.trunc(nr), extractDecimals(nr)];
+}
 
-    if (decimals < 10) {
-      word += 'zero ';
-    }
-    word += generateWords(decimals);
+function parseHundreds(hundreds: number): string {
+  let word = '';
+
+  switch (hundreds) {
+    case 1:
+      word = 'o sută';
+      break;
+    case 2:
+      word = 'două sute';
+      break;
+    default:
+      word = generateWords(hundreds) + ' sute';
   }
+
+  return word;
+}
+
+function extractDecimals(nr: number): number {
+  return +nr.toFixed(2) * 100 - Math.trunc(nr) * 100;
+}
+
+function parseDecimals(decimals: number): string {
+  let word = '';
+
+  word += ' virgulă ';
+
+  if (decimals < 10) {
+    word += 'zero ';
+  }
+
+  word += generateWords(decimals);
+
   return word;
 }
 
