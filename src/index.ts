@@ -56,9 +56,10 @@ export function generateWords(nr: number, words: string[] = []): string {
   }
 
   // We are done, if words[] is empty than we have zero else join words,
-  // replace() is used to prevent errors when user writes a number 100,000 instead of 100000
+  // first replace() is used to prevent errors when user writes a number 100,000 instead of 100000,
+  // second replace() is used to remove extra spaces
   if (nr === 0) {
-    return !words.length ? 'zero' : words.join(' ').replace(/,$/, '');
+    return !words.length ? 'zero' : words.join(' ').replace(/,$/, '').replace(/\s{2,}/, ' ');
   }
 
   // If negative, prepend “minus”
@@ -143,7 +144,9 @@ function match(nr: number, numberUnitsSingular: string, numberUnitsPlural: strin
       str = generateWords(nr) + ' ' + numberUnitsPlural;
       break;
     default:
-      str = generateWords(nr) + ' de ' + numberUnitsPlural;
+      let words = generateWords(nr);
+      if (nr % 10 === 2) words = words.replace(/doi$/, 'două');
+      str = words + ' de ' + numberUnitsPlural;
   }
 
   return str;
