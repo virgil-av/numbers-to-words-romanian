@@ -145,7 +145,9 @@ function match(nr: number, numberUnitsSingular: string, numberUnitsPlural: strin
       break;
     default:
       let words = generateWords(nr);
-      if (nr % 10 === 2) words = words.replace(/doi$/, 'două');
+      if (nr % 10 === 2) {
+        words = words.replace(/doi$/, 'două');
+      }
       str = words + ' de ' + numberUnitsPlural;
   }
 

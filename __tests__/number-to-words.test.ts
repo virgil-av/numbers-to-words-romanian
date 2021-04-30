@@ -60,3 +60,7 @@ test('should return "nouă sute nouăzeci și nouă de miliarde nouă sute nouă
   expect(generateWords(999999999999)).toBe('nouă sute nouăzeci și nouă de miliarde nouă sute nouăzeci și nouă de milioane nouă sute nouăzeci și nouă de mii nouă sute nouăzeci și nouă');
 });
 
+test('should return "douăzeci și două de mii"', () => {
+  expect(generateWords(22000)).toBe('douăzeci și două de mii');
+});
+
