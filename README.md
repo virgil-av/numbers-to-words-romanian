@@ -1,5 +1,5 @@
 
-# NUMBER TO WORDS IN ROMANIAN ![build](https://travis-ci.org/virgil-av/numbers-to-words-romanian.svg?branch=master)
+# NUMBER TO WORDS IN ROMANIAN
 Just converts numbers from digits to words in romanian language, maximum 999.999.999.999
 
 # NUMERE IN CUVINTE
