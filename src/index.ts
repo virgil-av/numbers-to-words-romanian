@@ -55,19 +55,16 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
   }
 
   // if user go past trillion just return a warning message
-  // .01 because 999.999.999.999,99 is still valid and the library should not throw an error
   if (nr > ONE_TRILLION - 0.01) {
     return 'over library limit';
   }
 
   // If the we are finished, then add the first decimal words got from the original number to the end of the words array
   if (nr === 0 && initialDecimalsWords.length) {
-    words.push(initialDecimalsWords);
+    words.push(currInitialDecimalWords);
   }
 
   // We are done, if words[] is empty than we have zero else join words,
-  // first replace() is used to prevent errors when user writes a number 100,000 instead of 100000,
-  // second replace() is used to remove extra spaces
   if (nr === 0) {
     return !words.length
       ? 'zero'
@@ -91,7 +88,6 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
     case nr < ONE_HUNDRED:
       remainder = Math.trunc(nr % TEN);
       word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
-      // In case of remainder, we need to handle it here to be able to add the “ și ”
       if (remainder) {
         word += ' și ';
       }
@@ -145,8 +141,12 @@ function parseDecimals(
     if (separatorPadding.after) {
       word += ' ';
     }
-
-    word += generateWords(decimals);
+    
+    if (decimals < 10) {
+      word += generateWords(decimals);
+    } else {
+      word += generateWords(decimals);
+    }
   }
   return word;
 }
