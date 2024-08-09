@@ -41,124 +41,95 @@ const TENTHS_LESS_THAN_HUNDRED = [
   "nouăzeci",
 ];
 
-export function generateWords(
-  nr: number,
-  words: string[] = [],
-  initialDecimalsWords: string = ""
-): string {
+export function generateWords(nr: number, words: string[] = [], initialDecimalsWords: string = ''): string {
+  // Handle NaN and limits
+  if (isNaN(nr)) return 'NaN';
+  if (nr > ONE_TRILLION - 0.01) return 'over library limit';
+
   const currInitialDecimalWords = !initialDecimalsWords.length
     ? parseDecimals(nr, { before: false, after: true })
     : initialDecimalsWords;
 
   let remainder = 0;
-  let word = "";
+  let word = '';
 
-  // If NaN stop and return 'NaN'
-  if (isNaN(nr)) {
-    return "NaN";
-  }
-
-  // if user go past trillion just return a warning message
-  // .01 because 999.999.999.999,99 is still valid and the library should not throw an error
-  if (nr > ONE_TRILLION - 0.01) {
-    return "over library limit";
-  }
-
-  // If the we are finished, then add the first decimal words got from the original number to the end of the words array
-  if (nr === 0 && initialDecimalsWords.length) {
-    words.push(initialDecimalsWords);
-  }
-
-  // We are done, if words[] is empty than we have zero else join words,
-  // first replace() is used to prevent errors when user writes a number 100,000 instead of 100000,
-  // second replace() is used to remove extra spaces
   if (nr === 0) {
-    return !words.length
-      ? "zero"
-      : words
-          .join(" ")
-          .replace(/,$/, "")
-          .replace(/\s{2,}/, " ");
+    if (initialDecimalsWords.length) {
+      words.push(initialDecimalsWords);
+    }
+    return !words.length ? 'zero' : words.join(' ').replace(/,$/, '').replace(/\s{2,}/, ' ');
   }
 
-  // If negative, prepend “minus”
   if (nr < 0) {
-    words.push("minus");
+    words.push('minus');
     nr = Math.abs(nr);
   }
 
   switch (true) {
     case nr < 20:
-      remainder = 0;
       word = LESS_THAN_TWENTY[Math.trunc(nr)];
-      // word += parseDecimals(nr);
       break;
     case nr < ONE_HUNDRED:
-      remainder = Math.trunc(nr % TEN);
-      word = TENTHS_LESS_THAN_HUNDRED[Math.floor(nr / TEN)];
-      // In case of remainder, we need to handle it here to be able to add the “ și ”
-      if (remainder) {
-        word += " și ";
-      }
+      const tens = Math.floor(nr / TEN);
+      const units = nr % TEN;
+      word = TENTHS_LESS_THAN_HUNDRED[tens];
+      if (units) word += ' și ' + LESS_THAN_TWENTY[units];
       break;
     case nr < ONE_THOUSAND:
-      remainder = nr % ONE_HUNDRED;
       const hundreds = Math.floor(nr / ONE_HUNDRED);
-      switch (hundreds) {
-        case 1:
-          word = "o sută";
-          break;
-        case 2:
-          word = "două sute";
-          break;
-        default:
-          word = generateWords(hundreds) + " sute";
-      }
+      remainder = nr % ONE_HUNDRED;
+      word = hundreds === 1 ? 'o sută' : generateWords(hundreds) + ' sute';
+      if (remainder) word += ' ' + generateWords(remainder);
       break;
     case nr < ONE_MILLION:
-      remainder = nr % ONE_THOUSAND;
       const thousands = Math.floor(nr / ONE_THOUSAND);
-      word = match(thousands, "o mie", "mii");
+      remainder = nr % ONE_THOUSAND;
+      word = match(thousands, 'o mie', 'mii');
+      if (remainder) word += ' ' + generateWords(remainder);
       break;
     case nr < ONE_BILLION:
-      remainder = nr % ONE_MILLION;
       const millions = Math.floor(nr / ONE_MILLION);
-      word = match(millions, "un milion", "milioane");
+      remainder = nr % ONE_MILLION;
+      word = match(millions, 'un milion', 'milioane');
+      if (remainder) word += ' ' + generateWords(remainder);
       break;
     case nr < ONE_TRILLION:
-      remainder = nr % ONE_BILLION;
       const billions = Math.floor(nr / ONE_BILLION);
-      word = match(billions, "un miliard", "miliarde");
+      remainder = nr % ONE_BILLION;
+      word = match(billions, 'un miliard', 'miliarde');
+      if (remainder) word += ' ' + generateWords(remainder);
       break;
   }
   words.push(word);
 
-  return generateWords(remainder, words, currInitialDecimalWords);
+  // Append decimal part if there are any
+  if (nr % 1 !== 0) {
+    const decimalsPart = parseDecimals(nr);
+    words.push(decimalsPart);
+  }
+
+  return words.join(' ').trim();
 }
 
 function parseDecimals(
   nr: number,
-  separatorPadding: { before: boolean; after: boolean } = {
-    before: true,
-    after: true,
-  }
+  separatorPadding: { before: boolean; after: boolean } = { before: true, after: true },
 ): string {
-  const decimals = parseInt(nr.toFixed(2).split(".")[1], 10);
-  let word = "";
+  const decimals = parseInt(nr.toFixed(2).split('.')[1], 10);
+  let word = '';
 
-  // Only add "virgulă" if there are significant decimals
   if (decimals > 0) {
     if (separatorPadding.before) {
-      word += " ";
+      word += ' ';
     }
-    word += "virgulă";
+    word += 'virgulă';
     if (separatorPadding.after) {
-      word += " ";
+      word += ' ';
     }
 
     // Add zero padding only if decimals are less than 10
     if (decimals < 10) {
-      word += "zero ";
+      word += 'zero ';
     }
     word += generateWords(decimals);
   }
