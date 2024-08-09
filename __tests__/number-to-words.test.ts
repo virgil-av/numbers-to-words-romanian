@@ -13,6 +13,14 @@ test('should return "douăzeci și unu"', () => {
 });
 
 test('should return "o sută"', () => {
+  expect(generateWords(100.01)).toBe('o sută virgulă zero unu');
+});
+
+test('should return "o sută"', () => {
+  expect(generateWords(10000.99)).toBe('zece mii virgulă nouăzeci și nouă');
+});
+
+test('should return "o sută"', () => {
   expect(generateWords(100)).toBe('o sută');
 });
 
