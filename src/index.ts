@@ -87,7 +87,6 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
     case nr < 20:
       remainder = 0;
       word = LESS_THAN_TWENTY[Math.trunc(nr)];
-      // word += parseDecimals(nr);
       break;
     case nr < ONE_HUNDRED:
       remainder = Math.trunc(nr % TEN);
@@ -147,9 +146,6 @@ function parseDecimals(
       word += ' ';
     }
 
-    if (decimals < 10) {
-      word += 'zero ';
-    }
     word += generateWords(decimals);
   }
   return word;
