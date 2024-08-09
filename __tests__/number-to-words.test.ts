@@ -92,9 +92,6 @@ test('should return "o sută nouăzeci și nouă virgulă cincizeci"', () => {
     expect(generateWords(100.01)).toBe('o sută virgulă zero unu');
   });
 
- // Import the function to be tested
-import { generateWords } from './path/to/your/module';
-
 describe('generateWords function', () => {
   test('should return "o sută" for 100', () => {
     expect(generateWords(100)).toBe('o sută');
