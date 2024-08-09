@@ -13,23 +13,23 @@ test('should return "douăzeci și unu"', () => {
 });
 
 test('should return "o sută"', () => {
-    expect(generateWords(100)).toBe('o sută');
+  expect(generateWords(100)).toBe('o sută');
 });
 
 test('should return "două sute"', () => {
-    expect(generateWords(200)).toBe('două sute');
+  expect(generateWords(200)).toBe('două sute');
 });
 
 test('should return "o sută douăzeci și cinci"', () => {
-    expect(generateWords(125)).toBe('o sută douăzeci și cinci');
+  expect(generateWords(125)).toBe('o sută douăzeci și cinci');
 });
 
 test('should return "o mie"', () => {
-    expect(generateWords(1000)).toBe('o mie');
+  expect(generateWords(1000)).toBe('o mie');
 });
 
 test('should return "o mie unu"', () => {
-    expect(generateWords(1001)).toBe('o mie unu');
+  expect(generateWords(1001)).toBe('o mie unu');
 });
 
 test('should return "o sută optsprezece mii nouă sute treizeci și unu"', () => {
@@ -64,3 +64,30 @@ test('should return "douăzeci și două de mii"', () => {
   expect(generateWords(22000)).toBe('douăzeci și două de mii');
 });
 
+test('should return "nouăsprezece virgulă douăzeci și cinci"', () => {
+  expect(generateWords(19.25)).toBe('nouăsprezece virgulă douăzeci și cinci');
+});
+
+test('should return "o sută nouăzeci și nouă virgulă douăzeci și cinci"', () => {
+  expect(generateWords(199.25)).toBe('o sută nouăzeci și nouă virgulă douăzeci și cinci');
+});
+
+test('should return "nouă sute nouăzeci și nouă de miliarde nouă sute nouăzeci și nouă de milioane nouă sute nouăzeci și nouă de mii nouă sute nouăzeci și nouă virgulă douăzeci și cinci"', () => {
+  expect(generateWords(999999999999.25)).toBe('nouă sute nouăzeci și nouă de miliarde nouă sute nouăzeci și nouă de milioane nouă sute nouăzeci și nouă de mii nouă sute nouăzeci și nouă virgulă douăzeci și cinci');
+});
+
+test('should return "o sută unu milioane două sute treizeci de mii patru sute șaizeci și cinci virgulă treizeci"', () => {
+  expect(generateWords(101230465.30)).toBe('o sută unu milioane două sute treizeci de mii patru sute șaizeci și cinci virgulă treizeci');
+});
+
+test('should return "nouă sute nouăzeci și nouă de miliarde nouă sute nouăzeci și nouă de milioane nouă sute nouăzeci și nouă de mii nouă sute nouăzeci și nouă virgulă nouăzeci și nouă"', () => {
+  expect(generateWords(999999999999.99)).toBe('nouă sute nouăzeci și nouă de miliarde nouă sute nouăzeci și nouă de milioane nouă sute nouăzeci și nouă de mii nouă sute nouăzeci și nouă virgulă nouăzeci și nouă');
+});
+
+test('should return "o sută nouăzeci și nouă virgulă cincizeci"', () => {
+  expect(generateWords(199.5)).toBe('o sută nouăzeci și nouă virgulă cincizeci');
+});
+
+test('should return "o sută nouăzeci și nouă virgulă zero cinci"', () => {
+  expect(generateWords(199.05)).toBe('o sută nouăzeci și nouă virgulă zero cinci');
+});
