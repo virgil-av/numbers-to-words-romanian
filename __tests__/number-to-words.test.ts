@@ -13,14 +13,6 @@ test('should return "douăzeci și unu"', () => {
 });
 
 test('should return "o sută"', () => {
-  expect(generateWords(100.01)).toBe('o sută virgulă zero unu');
-});
-
-test('should return "o sută"', () => {
-  expect(generateWords(10000.99)).toBe('zece mii virgulă nouăzeci și nouă');
-});
-
-test('should return "o sută"', () => {
   expect(generateWords(100)).toBe('o sută');
 });
 
@@ -96,6 +88,15 @@ test('should return "o sută nouăzeci și nouă virgulă cincizeci"', () => {
   expect(generateWords(199.5)).toBe('o sută nouăzeci și nouă virgulă cincizeci');
 });
 
-test('should return "o sută nouăzeci și nouă virgulă zero cinci"', () => {
-  expect(generateWords(199.05)).toBe('o sută nouăzeci și nouă virgulă zero cinci');
-});
+ test('should return "o sută virgulă zero unu" for 100.01', () => {
+    expect(generateWords(100.01)).toBe('o sută virgulă zero unu');
+  });
+
+  test('should return "o mie virgulă douăzeci și cinci" for 1000.25', () => {
+    expect(generateWords(1000.25)).toBe('o mie virgulă douăzeci și cinci');
+  });
+
+  test('should return "o sută douăzeci și trei mii patru sute cincizeci și șase virgulă șaptezeci și opt" for 123456.78', () => {
+    expect(generateWords(123456.78)).toBe('o sută douăzeci și trei mii patru sute cincizeci și șase virgulă șaptezeci și opt');
+  });
+
