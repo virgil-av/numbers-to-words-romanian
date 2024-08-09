@@ -1,6 +1,6 @@
 
 # NUMBER TO WORDS IN ROMANIAN
-Just converts numbers from digits to words in romanian language,
+Just converts numbers from digits to words in romanian language
 
 # NUMERE IN CUVINTE
 O librarie usoara care converteste numere in cuvinte
@@ -46,7 +46,7 @@ generateWords(999999999999)
 ```
 
 #### Changelog
-- v1.4.1 Bug fixes: I removed the logic that prepended "zero" before single-digit decimals. Now, the parseDecimals function processes decimals without appending "zero" unless it is explicitly required (e.g., for 0.01). This allows the generator to correctly represent decimals as words without adding unnecessary zeroes. 
+- v1.4.1 Patched an older bug where a word "zero" would show up before "virgulă" when decimals were used on round numbers like 100, 1000, 10000 and so on. Added new test cases.
 - v1.4.0 Merged @Meriegg pull request with decimal point feature.
 - v1.3.4 No changes, just github automation to npmjs setup 
 - v1.3.3 Merged PR request, fixes number 2 singular and plural. 
