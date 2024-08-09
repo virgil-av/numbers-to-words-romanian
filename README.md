@@ -46,7 +46,6 @@ generateWords(999999999999)
 ```
 
 #### Changelog
-- v1.4.1 Version Bump.
 - v1.4.0 Merged @Meriegg pull request with decimal point feature.
 - v1.3.4 No changes, just github automation to npmjs setup 
 - v1.3.3 Merged PR request, fixes number 2 singular and plural. 
