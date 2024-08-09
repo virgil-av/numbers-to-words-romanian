@@ -43,7 +43,7 @@ const TENTHS_LESS_THAN_HUNDRED = [
 
 export function generateWords(nr: number, words: string[] = [], initialDecimalsWords: string = ''): string {
   const currInitialDecimalWords = !initialDecimalsWords.length
-    ? parseDecimals(nr, { before: false, after: true })
+    ? parseDecimals(nr)
     : initialDecimalsWords;
 
   let remainder = 0;
@@ -54,17 +54,17 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
     return 'NaN';
   }
 
-  // if user go past trillion just return a warning message
+  // if user goes past trillion just return a warning message
   if (nr > ONE_TRILLION - 0.01) {
     return 'over library limit';
   }
 
-  // If the we are finished, then add the first decimal words got from the original number to the end of the words array
-  if (nr === 0 && initialDecimalsWords.length) {
+  // If the number is zero and there are decimals to include
+  if (nr === 0 && currInitialDecimalWords) {
     words.push(currInitialDecimalWords);
   }
 
-  // We are done, if words[] is empty than we have zero else join words,
+  // If the number is zero
   if (nr === 0) {
     return !words.length
       ? 'zero'
@@ -80,9 +80,9 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
     nr = Math.abs(nr);
   }
 
+  // Process integer part
   switch (true) {
     case nr < 20:
-      remainder = 0;
       word = LESS_THAN_TWENTY[Math.trunc(nr)];
       break;
     case nr < ONE_HUNDRED:
@@ -95,16 +95,7 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
     case nr < ONE_THOUSAND:
       remainder = nr % ONE_HUNDRED;
       const hundreds = Math.floor(nr / ONE_HUNDRED);
-      switch (hundreds) {
-        case 1:
-          word = 'o sută';
-          break;
-        case 2:
-          word = 'două sute';
-          break;
-        default:
-          word = generateWords(hundreds) + ' sute';
-      }
+      word = hundreds === 1 ? 'o sută' : generateWords(hundreds) + ' sute';
       break;
     case nr < ONE_MILLION:
       remainder = nr % ONE_THOUSAND;
@@ -124,31 +115,29 @@ export function generateWords(nr: number, words: string[] = [], initialDecimalsW
   }
   words.push(word);
 
-  return generateWords(remainder, words, currInitialDecimalWords);
+  // If there are decimals, process them
+  if (currInitialDecimalWords) {
+    words.push(currInitialDecimalWords);
+  }
+
+  return words.join(' ').replace(/\s{2,}/, ' ').trim();
 }
 
-function parseDecimals(
-  nr: number,
-  separatorPadding: { before: boolean; after: boolean } = { before: true, after: true },
-): string {
-  const decimals = parseInt(nr.toFixed(2).split('.')[1], 10);
+function parseDecimals(nr: number): string {
+  const [integerPart, decimalsPart] = nr.toFixed(2).split('.').map(Number);
   let word = '';
-  if (decimals > 0) {
-    if (separatorPadding.before) {
-      word += ' ';
-    }
-    word += 'virgulă';
-    if (separatorPadding.after) {
-      word += ' ';
-    }
+
+  if (decimalsPart > 0) {
+    word += ' virgulă';
     
-    if (decimals < 10) {
-      word += generateWords(decimals);
-    } else {
-      word += generateWords(decimals);
+    if (decimalsPart < 10) {
+      word += ' zero ';
     }
+
+    word += generateWords(decimalsPart);
   }
-  return word;
+  
+  return word.trim();
 }
 
 function match(nr: number, numberUnitsSingular: string, numberUnitsPlural: string): string {
