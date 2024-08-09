@@ -1,9 +1,9 @@
 
 # NUMBER TO WORDS IN ROMANIAN
-Just converts numbers from digits to words in romanian language, maximum 999.999.999.999
+Just converts numbers from digits to words in romanian language,
 
 # NUMERE IN CUVINTE
-O librarie usoara care converteste numere in cuvinte, maxim 999.999.999.999
+O librarie usoara care converteste numere in cuvinte
 
 ## Usage / Utilizare
 
@@ -13,6 +13,9 @@ import {generateWords} from 'numbers-to-words-romanian';
 
 generateWords(100)
 // => o sută
+
+generateWords(19.25)
+// => nouăsprezece virgulă douăzeci și cinci
 ```
 
 ```js
@@ -21,6 +24,9 @@ const {generateWords} = require('numbers-to-words-romanian');
 
 generateWords(125)
 // => o sută douăzeci și cinci
+
+generateWords(199.05)
+// => o sută nouăzeci și nouă virgulă zero cinci
 
 generateWords(118931)
 // => o sută optsprezece mii nouă sute treizeci și unu
@@ -40,6 +46,8 @@ generateWords(999999999999)
 ```
 
 #### Changelog
+- v1.4.0 Merged @Meriegg pull request with decimal point feature
+- v1.3.4 No changes, just github automation to npmjs setup 
 - v1.3.3 Merged PR request, fixes number 2 singular and plural. 
 - v1.3.2 restored undocumented string replace() method that was scrapped during PR
 - v1.3.1 code cleanup, improved logic, added more tests
